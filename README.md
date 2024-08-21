@@ -1,6 +1,6 @@
 # Analisando CSV com Llama3
 
-Este projeto web básico para estudos de LLM, utilizando o modelo Llama3 localmente (Offline)
+Projeto web básico para estudos de LLM, utilizando o modelo Llama3 localmente (Offline)
 
 ## Bibliotecas utilizadas:
 
