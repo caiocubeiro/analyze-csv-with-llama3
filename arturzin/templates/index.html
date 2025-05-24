@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Registro de Chamadas</title>
+</head>
+
+<body>
+  <h1>Registrar Entrada</h1>
+  <form action="/" method="POST">
+    <input type="number" name="crm" placeholder="Seu CRM escolar" required />
+    <button type="submit">Registrar Entrada</button>
+  </form>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <ul>
+    {% for cat, msg in messages %}
+    <li class="{{ cat }}">{{ msg }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endwith %}
+
+  <h2>Chamadas Abertas</h2>
+  <ul>
+    {% for c in open_calls %}
+    <li>
+      CRM {{ c.crm }} – Entrada {{ c.entry_time.strftime('%d/%m/%Y %H:%M:%S') }}
+      <form action="{{ url_for('register_exit', call_id=c.id) }}" method="POST" enctype="multipart/form-data"
+        style="display:inline;">
+        <input type="number" name="crm_conf" placeholder="Confirme seu CRM" required />
+        <input type="file" name="certificate" accept="image/*" />
+        <button type="submit">Registrar Saída</button>
+      </form>
+    </li>
+    {% else %}
+    <li>Nenhuma chamada em aberto.</li>
+    {% endfor %}
+  </ul>
+
+  <h2>Chamadas Fechadas (últimas 10)</h2>
+  <ul>
+    {% for c in closed_calls %}
+    <li>
+      CRM {{ c.crm }} – Entrada {{ c.entry_time.strftime('%H:%M') }}, Saída {{ c.exit_time.strftime('%H:%M') }},
+      Presentes: {{ c.lessons_present }}, Faltas: {{ c.absences }},
+      {% if c.justified %}Justificado ({{ c.certificate_path }}){% else %}Sem atestado{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</body>
+
+</html>
